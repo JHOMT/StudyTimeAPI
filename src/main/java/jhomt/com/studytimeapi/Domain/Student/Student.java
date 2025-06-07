@@ -73,4 +73,8 @@ public class Student {
         EntityUpdater.updateIfNotNull(updateStudent.email(), this::setEmail);
         EntityUpdater.updateIfNotNull(updateStudent.password(), this::setPassword);
     }
+
+    public void sumPoints(Integer pointsAwarded) {
+        this.totalPoints += pointsAwarded;
+    }
 }

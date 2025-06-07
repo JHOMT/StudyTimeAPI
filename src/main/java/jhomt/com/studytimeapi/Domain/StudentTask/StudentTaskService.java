@@ -2,8 +2,9 @@ package jhomt.com.studytimeapi.Domain.StudentTask;
 
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
 import jhomt.com.studytimeapi.Domain.Student.Student;
+import jhomt.com.studytimeapi.Domain.Student.StudentRepository;
+import jhomt.com.studytimeapi.Domain.Student.StudentService;
 import jhomt.com.studytimeapi.Domain.Task.Task;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +14,12 @@ import java.util.List;
 public class StudentTaskService {
 
     private final StudentTaskRepository studentTaskRepository;
+    private final StudentService studentService;
     private final ValidationsIDsGlobalService validationsIDsGlobalService;
 
-    public StudentTaskService(StudentTaskRepository studentTaskRepository, ValidationsIDsGlobalService validationsIDsGlobalService) {
+    public StudentTaskService(StudentTaskRepository studentTaskRepository, StudentService studentService, ValidationsIDsGlobalService validationsIDsGlobalService) {
         this.studentTaskRepository = studentTaskRepository;
+        this.studentService = studentService;
         this.validationsIDsGlobalService = validationsIDsGlobalService;
     }
 
@@ -28,6 +31,8 @@ public class StudentTaskService {
         StudentTask studentTask = new StudentTask(dataRegisterStudentTask);
         studentTask.setStudent(student);
         studentTask.setTask(task);
+
+        studentService.sumPoints(student, studentTask.getPointsAwarded());
 
         studentTask = studentTaskRepository.save(studentTask);
         return new DataListStudentTask(studentTask);

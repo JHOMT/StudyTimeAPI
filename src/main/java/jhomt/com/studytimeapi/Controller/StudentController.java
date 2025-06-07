@@ -1,6 +1,7 @@
 package jhomt.com.studytimeapi.Controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jhomt.com.studytimeapi.Domain.Student.DataListStudent;
 import jhomt.com.studytimeapi.Domain.Student.DataRegisterStudent;
 import jhomt.com.studytimeapi.Domain.Student.DataUpdateStudent;
@@ -45,6 +46,16 @@ public class StudentController {
     public ResponseEntity<?> listStudents() {
         try {
             List<DataListStudent> students = studentService.listStudents();
+            return new ResponseEntity<>(students, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error retrieving students: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/list-top/{amount}")
+    public ResponseEntity<?> listStudentsTop(@PathVariable @NotNull Integer amount) {
+        try {
+            List<DataListStudent> students = studentService.listStudentsTop(amount);
             return new ResponseEntity<>(students, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error retrieving students: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);

@@ -2,6 +2,7 @@ package jhomt.com.studytimeapi.Domain.Student;
 
 import jhomt.com.studytimeapi.Domain.GlobalConfiguration.GlobalConfigurationService;
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,5 +45,17 @@ public class StudentService {
         return students.stream()
                 .map(DataListStudent::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<DataListStudent> listStudentsTop(Integer amount) {
+        List<Student> students = studentRepository.findDistinctTopByTotalPoints(PageRequest.of(0, amount));
+        return students.stream()
+                .map(DataListStudent::new)
+                .collect(Collectors.toList());
+    }
+
+    public void sumPoints(Student student, Integer pointsAwarded) {
+        student.sumPoints(pointsAwarded);
+        studentRepository.save(student);
     }
 }
