@@ -20,16 +20,21 @@ public class CourseService {
     }
 
     @Transactional
-    public Course registerCourse(DataRegisterCourse dataRegisterCourse) {
+    public DataListCourse registerCourse(DataRegisterCourse dataRegisterCourse) {
         Course course = new Course(dataRegisterCourse);
-        return courseRepository.save(course);
+        course.setType(validationsIDsGlobalService.findCourseTypeById(dataRegisterCourse.typeId()));
+        course = courseRepository.save(course);
+        return new DataListCourse(course);
     }
 
     @Transactional
-    public Course updateCourse(DataUpdateCourse dataUpdateCourse) {
-        Course course = findCourseById(dataUpdateCourse.id());
-        course.update(dataUpdateCourse);
-        return courseRepository.save(course);
+    public DataListCourse updateCourse(DataUpdateCourse dataUpdateCourse) {
+        Course course = validationsIDsGlobalService.findCourseById(dataUpdateCourse.id());
+        if (dataUpdateCourse.typeId() != null) {
+            course.setType(validationsIDsGlobalService.findCourseTypeById(dataUpdateCourse.typeId()));
+        }
+        course = courseRepository.save(course);
+        return new DataListCourse(course);
     }
 
     public List<DataListCourse> listCourses() {
@@ -41,7 +46,7 @@ public class CourseService {
 
     @Transactional
     public void changeCourseStatus(Integer courseId) {
-        Course course = findCourseById(courseId);
+        Course course = validationsIDsGlobalService.findCourseById(courseId);
         course.changeStatus();
         courseRepository.save(course);
     }
@@ -52,10 +57,5 @@ public class CourseService {
                 .stream()
                 .map(DataListCourse::new)
                 .toList();
-    }
-
-    public Course findCourseById (Integer courseId) {
-        return courseRepository.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
     }
 }

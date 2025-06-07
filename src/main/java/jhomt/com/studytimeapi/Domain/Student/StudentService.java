@@ -1,7 +1,7 @@
 package jhomt.com.studytimeapi.Domain.Student;
 
+import jhomt.com.studytimeapi.Domain.GlobalConfiguration.GlobalConfigurationService;
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,15 +13,20 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ValidationsIDsGlobalService validationsIDsGlobalService;
+    private final GlobalConfigurationService  globalConfigurationService;
 
-    public StudentService(StudentRepository studentRepository, ValidationsIDsGlobalService validationsIDsGlobalService) {
+    public StudentService(StudentRepository studentRepository, ValidationsIDsGlobalService validationsIDsGlobalService, GlobalConfigurationService globalConfigurationService) {
         this.studentRepository = studentRepository;
         this.validationsIDsGlobalService = validationsIDsGlobalService;
+        this.globalConfigurationService = globalConfigurationService;
     }
 
     @Transactional
-    public DataListStudent registerStudent(DataRegisterStudent dataRegisterStudent) {
+    public DataListStudent registerStudentAndCreateConfiguration(DataRegisterStudent dataRegisterStudent) {
         Student student = new Student(dataRegisterStudent);
+
+        globalConfigurationService.createGlobalConfiguration(student);
+
         student = studentRepository.save(student);
         return new DataListStudent(student);
     }

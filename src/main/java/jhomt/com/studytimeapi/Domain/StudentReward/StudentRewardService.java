@@ -53,12 +53,23 @@ public class StudentRewardService {
         return new DataListStudentReward(studentReward);
     }
 
-    public List<StudentReward> listStudentRewards() {
-        return studentRewardRepository.findAll();
+    public List<DataListStudentReward> listStudentRewards() {
+        return studentRewardRepository.findAll()
+                .stream()
+                .map(DataListStudentReward::new)
+                .toList();
     }
 
     public List<DataListStudentReward> findStudentRewardById(Integer studentRewardId) {
         return studentRewardRepository.findByStudentId(studentRewardId)
+                .stream()
+                .map(DataListStudentReward::new)
+                .toList();
+    }
+
+    public List<DataListStudentReward> findStudentById(Integer studentId) {
+        Student student = validationsIDsGlobalService.findStudentById(studentId);
+        return student.getRewards()
                 .stream()
                 .map(DataListStudentReward::new)
                 .toList();

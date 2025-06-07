@@ -54,12 +54,19 @@ public class StudentTaskService {
         return new DataListStudentTask(studentTask);
     }
 
-    public List<DataListStudentTask> listStudentTasksId(Integer taskId) {
+    public List<DataListStudentTask> listStudentTasksId(Integer studentId) {
+        Student student = validationsIDsGlobalService.findStudentById(studentId);
+        return student.getStudentTasks()
+                .stream()
+                .map(DataListStudentTask::new)
+                .toList();
+    }
+
+    public List<DataListStudentTask> listStudentTasksByTaskId(Integer taskId) {
         Task task = validationsIDsGlobalService.findTaskById(taskId);
         return task.getStudentTasks()
                 .stream()
                 .map(DataListStudentTask::new)
                 .toList();
     }
-
 }

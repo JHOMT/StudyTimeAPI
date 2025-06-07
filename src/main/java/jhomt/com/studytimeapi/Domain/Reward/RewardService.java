@@ -1,8 +1,6 @@
 package jhomt.com.studytimeapi.Domain.Reward;
 
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
-import jhomt.com.studytimeapi.Domain.Student.Student;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

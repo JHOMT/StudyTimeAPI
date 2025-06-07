@@ -1,9 +1,7 @@
 package jhomt.com.studytimeapi.Domain.PomodoroSession;
 
-import com.sun.security.auth.UserPrincipal;
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
 import jhomt.com.studytimeapi.Domain.Student.Student;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +45,7 @@ public class PomodoroSessionService {
                 .toList();
     }
 
-    public PomodoroSession findPomodoroSessionById(Integer pomodoroSessionId) {
-        return validationsIDsGlobalService.findPomodoroSessionById(pomodoroSessionId);
+    public DataListPomodoroSession findById(Integer pomodoroSessionId) {
+        return new DataListPomodoroSession(validationsIDsGlobalService.findPomodoroSessionById(pomodoroSessionId));
     }
 }

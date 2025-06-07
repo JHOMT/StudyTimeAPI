@@ -16,6 +16,10 @@ import jhomt.com.studytimeapi.Domain.Reward.Reward;
 import jhomt.com.studytimeapi.Domain.Reward.RewardRepository;
 import jhomt.com.studytimeapi.Domain.Student.Student;
 import jhomt.com.studytimeapi.Domain.Student.StudentRepository;
+import jhomt.com.studytimeapi.Domain.StudentForum.StudentForum;
+import jhomt.com.studytimeapi.Domain.StudentForum.StudentForumRepository;
+import jhomt.com.studytimeapi.Domain.StudentMedal.StudentMedal;
+import jhomt.com.studytimeapi.Domain.StudentMedal.StudentMedalRepository;
 import jhomt.com.studytimeapi.Domain.Task.Task;
 import jhomt.com.studytimeapi.Domain.Task.TaskRepository;
 import jhomt.com.studytimeapi.Domain.Unit.Unit;
@@ -37,8 +41,10 @@ public class ValidationsIDsGlobalService {
     private final CourseTypeRepository courseTypeRepository;
     private final PomodoroSessionRepository pomodoroSessionRepository;
     private final UnitMaterialRepository unitMaterialRepository;
+    private final StudentForumRepository studentForumRepository;
+    private final StudentMedalRepository studentMedalRepository;
 
-    public ValidationsIDsGlobalService(StudentRepository studentRepository, CourseRepository courseRepository, GlobalConfigurationRepository globalConfigurationRepository, RewardRepository rewardRepository, ForumRepository forumRepository, MedalRepository medalRepository, TaskRepository taskRepository, UnitRepository unitRepository, CourseTypeRepository courseTypeRepository, PomodoroSessionRepository pomodoroSessionRepository, UnitMaterialRepository unitMaterialRepository1) {
+    public ValidationsIDsGlobalService(StudentRepository studentRepository, CourseRepository courseRepository, GlobalConfigurationRepository globalConfigurationRepository, RewardRepository rewardRepository, ForumRepository forumRepository, MedalRepository medalRepository, TaskRepository taskRepository, UnitRepository unitRepository, CourseTypeRepository courseTypeRepository, PomodoroSessionRepository pomodoroSessionRepository, UnitMaterialRepository unitMaterialRepository1, StudentForumRepository studentForumRepository, StudentMedalRepository studentMedalRepository) {
         this.studentRepository = studentRepository;
         this.courseRepository = courseRepository;
         this.globalConfigurationRepository = globalConfigurationRepository;
@@ -50,6 +56,8 @@ public class ValidationsIDsGlobalService {
         this.courseTypeRepository = courseTypeRepository;
         this.pomodoroSessionRepository = pomodoroSessionRepository;
         this.unitMaterialRepository = unitMaterialRepository1;
+        this.studentForumRepository = studentForumRepository;
+        this.studentMedalRepository = studentMedalRepository;
     }
 
     public Student findStudentById(Integer studentId) {
@@ -105,5 +113,15 @@ public class ValidationsIDsGlobalService {
     public UnitMaterial findUnitMaterialById(Integer unitMaterialId) {
         return unitMaterialRepository.findById(unitMaterialId)
                 .orElseThrow(() -> new RuntimeException("No se encontro el material de la unidad con ID: " + unitMaterialId));
+    }
+
+    public StudentForum findStudentForumRepositoryById(Integer studentForumId) {
+        return studentForumRepository.findById(studentForumId)
+                .orElseThrow(() -> new RuntimeException("No se encontro un estudiante relacionado al foro con el ID: " + studentForumId ));
+    }
+
+    public StudentMedal findStudentMedalById( Integer studentMedalId) {
+        return studentMedalRepository.findById(studentMedalId)
+                .orElseThrow(() -> new RuntimeException("No se encontro el medal con ID: " + studentMedalId));
     }
 }

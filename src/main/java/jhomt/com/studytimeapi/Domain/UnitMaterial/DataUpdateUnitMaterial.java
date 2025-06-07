@@ -16,10 +16,8 @@ public record DataUpdateUnitMaterial(
         String materialBase64
 ) {
     public DataUpdateUnitMaterial {
-        if (materialType != null) {
+        if (materialType != null || materialBase64 != null) {
             validateMaterialBase64(materialType, materialBase64);
-        } else {
-            throw new IllegalArgumentException("El tipo de material no puede ser nulo");
         }
     }
 

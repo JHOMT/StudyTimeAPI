@@ -1,14 +1,11 @@
 package jhomt.com.studytimeapi.Domain.StudentForum;
 
-import jhomt.com.studytimeapi.Domain.Course.Course;
 import jhomt.com.studytimeapi.Domain.Forum.Forum;
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
 import jhomt.com.studytimeapi.Domain.Student.Student;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,13 +19,12 @@ public class StudentForumService {
         this.validationsIDsGlobalService = validationsIDsGlobalService;
     }
 
-    // Registrar la participación de un estudiante en un foro
     @Transactional
     public DataListStudentForum registerStudentForum(DataRegisterStudentForum dataRegisterStudentForum) {
         Student student = validationsIDsGlobalService.findStudentById(dataRegisterStudentForum.studentId());
         Forum forum = validationsIDsGlobalService.findForumById(dataRegisterStudentForum.forumId());
 
-        StudentForum studentForum = new StudentForum();
+        StudentForum studentForum = new StudentForum(dataRegisterStudentForum);
         studentForum.setStudent(student);
         studentForum.setForum(forum);
 
@@ -38,11 +34,9 @@ public class StudentForumService {
 
     @Transactional
     public DataListStudentForum updateStudentForum(DataUpdateStudentForum dataUpdateStudentForum) {
-        StudentForum studentForum = studentForumRepository.findById(dataUpdateStudentForum.id())
-                .orElseThrow(() -> new RuntimeException("Participación no encontrada"));
+        StudentForum studentForum = validationsIDsGlobalService.findStudentForumRepositoryById(dataUpdateStudentForum.id());
 
-        studentForum.setResponse(dataUpdateStudentForum.response());
-        studentForum.setPointsAwarded(dataUpdateStudentForum.pointsAwarded());
+        studentForum.update(dataUpdateStudentForum);
 
         if (dataUpdateStudentForum.studentId() != null) {
             Student student = validationsIDsGlobalService.findStudentById(dataUpdateStudentForum.studentId());
@@ -58,21 +52,12 @@ public class StudentForumService {
         return new DataListStudentForum(studentForum);
     }
 
-    public List<StudentForum> listStudentForums() {
-        return studentForumRepository.findAll();
-    }
-
-    public List<DataListStudentForum> listStudentForumsByCourseId(Integer courseId) {
-        Course course = validationsIDsGlobalService.findCourseById(courseId);
-        List<Forum> forums = course.getForums();
-        List<DataListStudentForum> studentForums = new ArrayList<>();
-        for (Forum forum : forums) {
-            List<StudentForum> studentForumList = studentForumRepository.findByForum(forum);
-            for (StudentForum studentForum : studentForumList) {
-                studentForums.add(new DataListStudentForum(studentForum));
-            }
-        }
-        return studentForums;
+    public List<DataListStudentForum> findStudentForumById(Integer forumId) {
+        Forum forum = validationsIDsGlobalService.findForumById(forumId);
+        return forum.getStudentForum()
+                .stream()
+                .map(DataListStudentForum::new)
+                .toList();
     }
 
 }

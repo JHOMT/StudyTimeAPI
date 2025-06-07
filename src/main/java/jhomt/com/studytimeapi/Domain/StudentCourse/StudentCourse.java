@@ -30,16 +30,22 @@ public class StudentCourse {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
+    @Column(name = "status", nullable = false)
+    private Boolean status = true;
+
     public StudentCourse(DataRegisterStudentCourse dataRegisterStudentCourse, Student student, Course course) {
         this.id = new StudentCourseId(dataRegisterStudentCourse.studentId(), dataRegisterStudentCourse.courseId());
         this.student = student;
         this.course = course;
     }
 
-    public StudentCourse(DataUpdateStudentCourse dataUpdateStudentCourse, Student student, Course course) {
-        this.id = new StudentCourseId(dataUpdateStudentCourse.studentId(), dataUpdateStudentCourse.courseId());
+    public StudentCourse(Student student, Course course) {
+        this.id = new StudentCourseId(student.getId(), course.getId());
         this.student = student;
         this.course = course;
     }
 
+    public void changeStatus() {
+        this.status = !this.status;
+    }
 }

@@ -48,11 +48,6 @@ public class StudentTask {
     @Column(name = "points_awarded")
     private Integer pointsAwarded = 0;
 
-
-    @OneToMany(mappedBy = "studentTask", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Student> students;
-
-
     public StudentTask(DataRegisterStudentTask registerStudentTask){
         this.importance = registerStudentTask.importance();
     }

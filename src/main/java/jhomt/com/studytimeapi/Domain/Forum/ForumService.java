@@ -1,11 +1,12 @@
 package jhomt.com.studytimeapi.Domain.Forum;
 
+import jhomt.com.studytimeapi.Domain.Course.Course;
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ForumService {
@@ -19,22 +20,32 @@ public class ForumService {
     }
 
     @Transactional
-    public Forum registerForum(DataRegisterForum dataRegisterForum) {
+    public DataListForum registerForum(DataRegisterForum dataRegisterForum) {
+        Course course = validationsIDsGlobalService.findCourseById(dataRegisterForum.courseId());
+
         Forum forum = new Forum(dataRegisterForum);
-        return forumRepository.save(forum);
+        forum.setCourse(course);
+        forum = forumRepository.save(forum);
+        return new DataListForum(forum);
     }
 
     @Transactional
-    public Forum updateForum(DataUpdateForum dataUpdateForum) {
+    public DataListForum updateForum(DataUpdateForum dataUpdateForum) {
         Forum forum = validationsIDsGlobalService.findForumById(dataUpdateForum.id());
         forum.update(dataUpdateForum);
-        return forumRepository.save(forum);
+        if (dataUpdateForum.courseId() != null) {
+            Course course = validationsIDsGlobalService.findCourseById(dataUpdateForum.courseId());
+            forum.setCourse(course);
+        }
+        forum = forumRepository.save(forum);
+        return new DataListForum(forum);
     }
 
-    public List<DataListForum> listForums() {
-        List<Forum> forums = forumRepository.findAll();
-        return forums.stream()
+    public List<DataListForum> listForumsByCourseId(Integer courseId) {
+        Course course = validationsIDsGlobalService.findCourseById(courseId);
+        return course.getForums()
+                .stream()
                 .map(DataListForum::new)
-                .toList();
+                .collect(Collectors.toList());
     }
 }

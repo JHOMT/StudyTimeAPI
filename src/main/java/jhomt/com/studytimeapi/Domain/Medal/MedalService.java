@@ -19,16 +19,18 @@ public class MedalService {
     }
 
     @Transactional
-    public Medal registerMedal(DataRegisterMedal dataRegisterMedal) {
+    public DataListMedal registerMedal(DataRegisterMedal dataRegisterMedal) {
         Medal medal = new Medal(dataRegisterMedal);
-        return medalRepository.save(medal);
+        medal = medalRepository.save(medal);
+        return new DataListMedal(medal);
     }
 
     @Transactional
-    public Medal updateMedal(DataUpdateMedal dataUpdateMedal) {
+    public DataListMedal updateMedal(DataUpdateMedal dataUpdateMedal) {
         Medal medal = validationsIDsGlobalService.findMedalById(dataUpdateMedal.id());
         medal.update(dataUpdateMedal);
-        return medalRepository.save(medal);
+        medal = medalRepository.save(medal);
+        return new DataListMedal(medal);
     }
 
     public List<DataListMedal> listMedals() {

@@ -46,10 +46,6 @@ public class TaskService {
         return new DataListTask(task);
     }
 
-    public List<Task> listTasks() {
-        return taskRepository.findAll();
-    }
-
     public List<DataListTask> findTaskByUnitId(Integer unitId) {
         Unit unit = validationsIDsGlobalService.findUnitById(unitId);
         return unit.getTasks()

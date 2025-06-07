@@ -7,6 +7,7 @@ import jhomt.com.studytimeapi.Domain.Core.EntityUpdater;
 import jhomt.com.studytimeapi.Domain.CourseType.CourseType;
 import jhomt.com.studytimeapi.Domain.Forum.Forum;
 import jhomt.com.studytimeapi.Domain.StudentCourse.StudentCourse;
+import jhomt.com.studytimeapi.Domain.StudentForum.StudentForum;
 import jhomt.com.studytimeapi.Domain.Unit.Unit;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

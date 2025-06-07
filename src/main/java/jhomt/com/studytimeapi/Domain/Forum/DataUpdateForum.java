@@ -9,6 +9,7 @@ public record DataUpdateForum(
         Integer id,
 
         String title,
-        String description
+        String description,
+        Integer courseId
 ) {
 }

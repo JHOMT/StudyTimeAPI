@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentCourseService {
@@ -30,20 +31,6 @@ public class StudentCourseService {
         return new DataListStudentCourse(studentCourse);
     }
 
-    @Transactional
-    public DataListStudentCourse updateStudentCourse(DataUpdateStudentCourse dataUpdateStudentCourse) {
-        Student student = validationsIDsGlobalService.findStudentById(dataUpdateStudentCourse.studentId());
-        Course course = validationsIDsGlobalService.findCourseById(dataUpdateStudentCourse.courseId());
-
-        StudentCourse studentCourse = new StudentCourse(dataUpdateStudentCourse, student, course);
-        studentCourse = studentCourseRepository.save(studentCourse);
-        return new DataListStudentCourse(studentCourse);
-    }
-
-    public List<StudentCourse> listStudentCourses() {
-        return studentCourseRepository.findAll();
-    }
-
     public List<DataListStudentCourse> listStudentCoursesByCourseId(Integer courseId) {
         Course course = validationsIDsGlobalService.findCourseById(courseId);
         return course.getStudentCourses()
@@ -52,4 +39,23 @@ public class StudentCourseService {
                 .toList();
     }
 
+    public List<DataListStudentCourse> listCoursesByStudentId(Integer studentId) {
+        Student student = validationsIDsGlobalService.findStudentById(studentId);
+        return student.getCourses()
+                .stream()
+                .map(DataListStudentCourse::new)
+                .toList();
+    }
+
+    public void changeStatusByStudentCourseId(Integer studentId, Integer courseId) {
+        Student student = validationsIDsGlobalService.findStudentById(studentId);
+        Course course = validationsIDsGlobalService.findCourseById(courseId);
+
+        StudentCourse studentCourse = studentCourseRepository.findByStudentAndCourse(student, course)
+                .orElseThrow(() -> new RuntimeException("StudentCourse not found"));
+
+
+        studentCourse.changeStatus();
+        studentCourseRepository.save(studentCourse);
+    }
 }

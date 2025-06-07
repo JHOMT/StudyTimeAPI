@@ -31,9 +31,7 @@ public class UnitMaterialService {
 
     @Transactional
     public DataListUnitMaterial updateUnitMaterial(DataUpdateUnitMaterial dataUpdateUnitMaterial) {
-        UnitMaterial unitMaterial = unitMaterialRepository.findById(dataUpdateUnitMaterial.id())
-                .orElseThrow(() -> new RuntimeException("Material de la unidad no encontrado"));
-
+        UnitMaterial unitMaterial = validationsIDsGlobalService.findUnitMaterialById(dataUpdateUnitMaterial.unitId());
         unitMaterial.update(dataUpdateUnitMaterial);
 
         if (dataUpdateUnitMaterial.unitId() != null) {

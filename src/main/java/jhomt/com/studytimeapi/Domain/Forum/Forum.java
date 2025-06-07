@@ -5,10 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jhomt.com.studytimeapi.Domain.Core.EntityUpdater;
 import jhomt.com.studytimeapi.Domain.Course.Course;
+import jhomt.com.studytimeapi.Domain.StudentForum.StudentForum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,6 +34,9 @@ public class Forum {
 
     @Column(name = "description", nullable = false)
     private String description;
+
+    @OneToMany(mappedBy = "forum", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<StudentForum> studentForum;
 
     public Forum(DataRegisterForum forum) {
         this.title = forum.title();

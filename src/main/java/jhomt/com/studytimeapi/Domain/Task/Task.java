@@ -34,6 +34,7 @@ public class Task {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type_task", nullable = false)
     private TaskType typeTask;
 

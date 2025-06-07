@@ -1,7 +1,6 @@
 package jhomt.com.studytimeapi.Domain.CourseType;
 
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,16 +18,18 @@ public class CourseTypeService {
     }
 
     @Transactional
-    public CourseType registerCourseType(DataRegisterCourseType dataRegisterCourseType) {
+    public DataListCourseType registerCourseType(DataRegisterCourseType dataRegisterCourseType) {
         CourseType courseType = new CourseType(dataRegisterCourseType);
-        return courseTypeRepository.save(courseType);
+        courseType = courseTypeRepository.save(courseType);
+        return new DataListCourseType(courseType);
     }
 
     @Transactional
-    public CourseType updateCourseType(DataUpdateCourseType dataUpdateCourseType) {
+    public DataListCourseType updateCourseType(DataUpdateCourseType dataUpdateCourseType) {
         CourseType courseType = validationsIDsGlobalService.findCourseTypeById(dataUpdateCourseType.id());
         courseType.update(dataUpdateCourseType);
-        return courseTypeRepository.save(courseType);
+        courseType = courseTypeRepository.save(courseType);
+        return new DataListCourseType(courseType);
     }
 
     public List<DataListCourseType> listCourseTypes() {
@@ -36,5 +37,9 @@ public class CourseTypeService {
         return courseTypes.stream()
                 .map(DataListCourseType::new)
                 .toList();
+    }
+
+    public DataListCourseType findById(int id) {
+        return new DataListCourseType(validationsIDsGlobalService.findCourseTypeById(id));
     }
 }

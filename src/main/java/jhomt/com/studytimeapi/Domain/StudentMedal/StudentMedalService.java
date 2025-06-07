@@ -4,7 +4,6 @@ import jhomt.com.studytimeapi.Domain.Medal.Medal;
 import jhomt.com.studytimeapi.Domain.ServiceGlobal.ValidationsIDsGlobalService;
 import jhomt.com.studytimeapi.Domain.Student.Student;
 import jhomt.com.studytimeapi.Domain.Unit.Unit;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,8 +37,7 @@ public class StudentMedalService {
 
     @Transactional
     public DataListStudentMedal updateStudentMedal(DataUpdateStudentMedal dataUpdateStudentMedal) {
-        StudentMedal studentMedal = studentMedalRepository.findById(dataUpdateStudentMedal.id())
-                .orElseThrow(() -> new RuntimeException("Medalla del estudiante no encontrada"));
+        StudentMedal studentMedal = validationsIDsGlobalService.findStudentMedalById(dataUpdateStudentMedal.id());
 
         studentMedal.update(dataUpdateStudentMedal);
 
@@ -62,8 +60,11 @@ public class StudentMedalService {
         return new DataListStudentMedal(studentMedal);
     }
 
-    public List<StudentMedal> listStudentMedals() {
-        return studentMedalRepository.findAll();
+    public List<DataListStudentMedal> listStudentMedals() {
+        return studentMedalRepository.findAll()
+                .stream()
+                .map(DataListStudentMedal::new)
+                .toList();
     }
     public List<DataListStudentMedal> listStudentMedalsByStudentId(Integer studentId) {
         Student student = validationsIDsGlobalService.findStudentById(studentId);

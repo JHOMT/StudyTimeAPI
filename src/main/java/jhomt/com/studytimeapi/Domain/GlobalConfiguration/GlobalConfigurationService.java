@@ -18,24 +18,27 @@ public class GlobalConfigurationService {
     }
 
     @Transactional
-    public GlobalConfiguration updateGlobalConfiguration(DataUpdateGlobalConfiguration dataUpdateGlobalConfiguration) {
-        GlobalConfiguration globalConfiguration = findGlobalConfigurationById(dataUpdateGlobalConfiguration.id());
+    public DataListGlobalConfiguration createGlobalConfiguration(Student student) {
+        GlobalConfiguration globalConfiguration = new GlobalConfiguration(student);
+        globalConfigurationRepository.save(globalConfiguration);
+        return new DataListGlobalConfiguration(globalConfiguration);
+    }
+
+    @Transactional
+    public DataListGlobalConfiguration updateGlobalConfiguration(DataUpdateGlobalConfiguration dataUpdateGlobalConfiguration) {
+        GlobalConfiguration globalConfiguration = validationsIDsGlobalService.findGlobalConfigurationById(dataUpdateGlobalConfiguration.id());
 
         if (dataUpdateGlobalConfiguration.studentId() != null) {
             validationsIDsGlobalService.findStudentById(dataUpdateGlobalConfiguration.studentId());
         }
 
         globalConfiguration.update(dataUpdateGlobalConfiguration);
-        return globalConfigurationRepository.save(globalConfiguration);
+        globalConfiguration = globalConfigurationRepository.save(globalConfiguration);
+        return new DataListGlobalConfiguration(globalConfiguration);
     }
 
-    public DataListGlobalConfiguration configuration(Integer studentId) {
+    public DataListGlobalConfiguration findConfigurationByStudentId(Integer studentId) {
         Student student = validationsIDsGlobalService.findStudentById(studentId);
         return new DataListGlobalConfiguration(student.getGlobalConfiguration());
-    }
-
-    public GlobalConfiguration findGlobalConfigurationById(Integer configurationId) {
-        return globalConfigurationRepository.findById(configurationId)
-                .orElseThrow(() -> new RuntimeException("Configuración global no encontrada"));
     }
 }

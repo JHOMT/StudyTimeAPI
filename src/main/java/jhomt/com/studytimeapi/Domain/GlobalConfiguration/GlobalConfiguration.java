@@ -1,15 +1,12 @@
 package jhomt.com.studytimeapi.Domain.GlobalConfiguration;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import jhomt.com.studytimeapi.Domain.Core.EntityUpdater;
 import jhomt.com.studytimeapi.Domain.Student.Student;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -27,7 +24,7 @@ public class GlobalConfiguration {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @Column(name = "usePomodoro")
+    @Column(name = "use_pomodoro")
     private Boolean usePomodoro = true;
 
     @Column(name = "enable_notifications")
@@ -44,6 +41,10 @@ public class GlobalConfiguration {
 
     @Column(name = "theme", length = 50)
     private String theme = "light";
+
+    public GlobalConfiguration(Student student) {
+        this.student = student;
+    }
 
     public void update(DataUpdateGlobalConfiguration updateGlobalConfiguration) {
         EntityUpdater.updateIfNotNull(updateGlobalConfiguration.usePomodoro(), this::setUsePomodoro);

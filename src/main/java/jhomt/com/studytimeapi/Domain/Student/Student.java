@@ -59,6 +59,9 @@ public class Student {
     @OneToOne(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private GlobalConfiguration globalConfiguration;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentTask> studentTasks;
+
     public Student (DataRegisterStudent registerStudent) {
         this.name = registerStudent.name();
         this.email = registerStudent.email();
