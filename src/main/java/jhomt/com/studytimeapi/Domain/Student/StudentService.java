@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,5 +58,13 @@ public class StudentService {
     public void sumPoints(Student student, Integer pointsAwarded) {
         student.sumPoints(pointsAwarded);
         studentRepository.save(student);
+    }
+
+    public DataListStudent authLogin(DataLoginStudent dataLoginStudent){
+        Optional<Student> student = studentRepository.login(dataLoginStudent.email(), dataLoginStudent.password());
+        if (student.isPresent()) {
+            return new DataListStudent(student.get());
+        }
+        throw new RuntimeException("Invalid email or password");
     }
 }
