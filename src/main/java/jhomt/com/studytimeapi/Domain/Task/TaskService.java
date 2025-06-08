@@ -53,4 +53,9 @@ public class TaskService {
                 .map(DataListTask::new)
                 .toList();
     }
+
+    public  DataListTask findTaskById(Integer taskId) {
+        Task task = validationsIDsGlobalService.findTaskById(taskId);
+        return new DataListTask(task);
+    }
 }

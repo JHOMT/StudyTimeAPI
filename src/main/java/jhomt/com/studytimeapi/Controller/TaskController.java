@@ -50,4 +50,14 @@ public class TaskController {
             return new ResponseEntity<>("Error retrieving tasks by unit ID: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/{taskId}")
+    public ResponseEntity<?> findTaskById(@PathVariable Integer taskId) {
+        try {
+            DataListTask task = taskService.findTaskById(taskId);
+            return new ResponseEntity<>(task, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error retrieving task by ID: " + e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
