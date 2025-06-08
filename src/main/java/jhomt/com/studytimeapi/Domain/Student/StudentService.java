@@ -27,9 +27,12 @@ public class StudentService {
     public DataListStudent registerStudentAndCreateConfiguration(DataRegisterStudent dataRegisterStudent) {
         Student student = new Student(dataRegisterStudent);
 
+        // 1. Guardar primero el estudiante (ya tiene ID)
+        student = studentRepository.save(student);
+
+        // 2. Luego crear la configuración global referenciando al estudiante persistido
         globalConfigurationService.createGlobalConfiguration(student);
 
-        student = studentRepository.save(student);
         return new DataListStudent(student);
     }
 
