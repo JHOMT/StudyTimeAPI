@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: jhomt.com.studytimeapi.StudyTimeApiApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.84 s -- in jhomt.com.studytimeapi.StudyTimeApiApplicationTests
